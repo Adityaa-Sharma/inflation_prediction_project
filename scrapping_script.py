@@ -93,8 +93,17 @@ def missing_month(data):
 data_repo=missing_month(data_copy)
 # print_data(data_repo)
 
+
+
+
+
+## scrapping of inflation data.
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+
 
 def scrape_table_rows(url, xpath):
 
@@ -123,15 +132,58 @@ def scrape_table_rows(url, xpath):
 # Example usage:
 url = 'https://www.macrotrends.net/global-metrics/countries/IND/india/inflation-rate-cpi'
 xpath = "//table[@class='historical_data_table table table-striped table-bordered']//tbody//tr"
-data_inflation = scrape_table_rows(url, xpath)
+# data_inflation = scrape_table_rows(url, xpath)
 
-data_inflation1 = [list(row) for row in data_inflation ]
+# data_inflation1 = [list(row) for row in data_inflation ]
 # print_data(data_inflation1)
-data_inflation1.insert(0,['Year','Inflation_rate','Inflation_change'])
-print_data(data_inflation1)
+# data_inflation1.insert(0,['Year','Inflation_rate','Inflation_change'])
+# print_data(data_inflation1)
 
 
 
+## calculating the reverse repo rate data.
 
+xpath1 = "//div[@class='econ_tablebx historicdata']//table[@id='hist_tbl']/tbody"
+url1='https://www.moneycontrol.com/economic-calendar/india-reverse-repo-rate/9010822'
+
+
+def scrape_table_rows_button(url, button_class, xpath):
+    # Initialize the Chrome WebDriver
+    driver = webdriver.Chrome()
+
+    try:
+        # Load the page
+        driver.get(url)
+
+        # Find the "Show More" button element
+        more_button = driver.find_element(By.CLASS_NAME, button_class)
+
+        # Use JavaScript to click the button
+        driver.execute_script("arguments[0].click();", more_button)
+
+        # Wait for the additional data to load
+        wait = WebDriverWait(driver, 10)
+        wait.until(EC.visibility_of_element_located((By.XPATH, xpath)))
+
+        # Find the table element
+        table = driver.find_element(By.XPATH, xpath)
+
+        # Extract the data from the table
+        data = []
+        for row in table.find_elements(By.TAG_NAME, "tr"):
+            row_data = [td.text.strip() for td in row.find_elements(By.TAG_NAME, "td")]
+            data.append(row_data)
+
+        return data
+    finally:
+        # Close the WebDriver
+        driver.quit()
+
+# Example usage
+url = 'https://www.moneycontrol.com/economic-calendar/india-reverse-repo-rate/9010822'
+button_class = 'show_more_alink'
+xpath = "//table[@class='MT15']//tbody//tr"
+data_rrr = scrape_table_rows_button(url, button_class, xpath)
+print_data(data_rrr)
 
 
