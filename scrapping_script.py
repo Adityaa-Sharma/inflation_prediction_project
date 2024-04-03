@@ -91,6 +91,47 @@ def missing_month(data):
     return data
 
 data_repo=missing_month(data_copy)
-print_data(data_repo)
+# print_data(data_repo)
 
-## probblem: months i which multiple change were done
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+def scrape_table_rows(url, xpath):
+
+    driver = webdriver.Chrome()
+
+    # Load the page
+    driver.get(url)
+
+    # Find all <tr> elements within the specified XPath
+    tr_elements = driver.find_elements(By.XPATH, xpath)
+
+    # Initialize an empty list to store the data
+    data = []
+
+    # Extract and append the text content of each <td> element in each <tr>
+    for tr in tr_elements:
+        td_elements = tr.find_elements(By.TAG_NAME, "td")
+        row_data = [td.text.strip() for td in td_elements]
+        data.append(row_data)
+
+    # After you're done, close the WebDriver
+    driver.quit()
+
+    return data
+
+# Example usage:
+url = 'https://www.macrotrends.net/global-metrics/countries/IND/india/inflation-rate-cpi'
+xpath = "//table[@class='historical_data_table table table-striped table-bordered']//tbody//tr"
+data_inflation = scrape_table_rows(url, xpath)
+
+data_inflation1 = [list(row) for row in data_inflation ]
+# print_data(data_inflation1)
+data_inflation1.insert(0,['Year','Inflation_rate','Inflation_change'])
+print_data(data_inflation1)
+
+
+
+
+
+
