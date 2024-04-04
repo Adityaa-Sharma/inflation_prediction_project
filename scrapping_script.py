@@ -97,7 +97,7 @@ data_repo=missing_month(data_copy)
 
 
 
-## scrapping of inflation data.
+## scrapping of inflation data yoy.
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -132,11 +132,47 @@ def scrape_table_rows(url, xpath):
 # Example usage:
 url = 'https://www.macrotrends.net/global-metrics/countries/IND/india/inflation-rate-cpi'
 xpath = "//table[@class='historical_data_table table table-striped table-bordered']//tbody//tr"
-data_inflation = scrape_table_rows(url, xpath)
+# data_inflation = scrape_table_rows(url, xpath)
 
-data_inflation1 = [list(row) for row in data_inflation ]
-print_data(data_inflation1)
-data_inflation1.insert(0,['Year','Inflation_rate','Inflation_change'])
-print_data(data_inflation1)
+# data_inflation1 = [list(row) for row in data_inflation ]
+# print_data(data_inflation1)
+# data_inflation1.insert(0,['Year','Inflation_rate','Inflation_change'])
+# print_data(data_inflation1)
 
 
+## inflation based on the cpi
+url1='https://labourbureau.gov.in/rate-of-inflation'
+xpath1 = "//table[@class='table']//tbody//tr"
+
+# inflation_mom_cpi=scrape_table_rows(url1,xpath1)
+# inflation_mom1_cpi = [list(row) for row in inflation_mom_cpi ]
+
+# print(inflation_mom1_cpi)
+
+
+## consumer confidence index
+
+import pandas as pd
+
+# Provided CPI data
+cci_data = [
+    98.5, 98.4, 98.2, 97.9, 97.4, 96.6, 95.9, 95.5, 95.7, 96.0, 95.3, 93.1,
+    90.2, 88.0, 87.6, 88.4, 89.8, 91.5, 93.2, 94.8, 96.2, 97.3, 98.3, 99.1,
+    99.6, 99.6, 99.1, 98.6, 98.6, 99.8, 101.6, 103.1, 103.8, 103.8, 103.4,
+    102.5, 101.5, 100.7, 100.3, 100.2, 100.4, 100.8, 101.3, 101.7, 102.0,
+    102.2, 102.3, 102.4, 102.7, 103.1, 103.7, 104.4, 104.7, 104.3, 103.6,
+    102.9, 102.2, 101.8, 101.6, 101.6, 101.7, 101.7, 101.3, 100.8, 100.4,
+    100.3, 100.4, 100.3, 99.9, 99.5, 99.4, 99.9, 100.6, 101.1, 101.0, 100.6,
+    100.2, 100.2, 100.4, 100.7, 101.0, 101.1, 101.3, 101.4, 101.6, 101.7,
+    101.7, 101.8, 102.0, 102.4, 103.0, 103.7, 104.3, 104.8, 105.0, 104.8,
+    104.3, 103.7
+]
+
+# Generate date range from August 2012 to September 2020
+date_range = pd.date_range(start='2012-08-01', end='2020-09-01', freq='MS')
+
+# Create a DataFrame
+cci_df = pd.DataFrame({'Date': date_range, 'CCI': cci_data})
+
+# Display the DataFrame
+# print(cci_df)
