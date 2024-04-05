@@ -176,3 +176,13 @@ cci_df = pd.DataFrame({'Date': date_range, 'CCI': cci_data})
 
 # Display the DataFrame
 # print(cci_df)
+
+
+
+# gdp data mmanipulation
+
+import pandas as pd
+import numpy as np
+gdp_data=pd.read_excel("C:\\Users\\91978\\Desktop\\inflation_prediction_project\\excel_files\\gdp_changeqtr.xlsx")
+
+gdp_data.head()
