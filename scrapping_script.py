@@ -91,10 +91,11 @@ def missing_month(data):
     return data
 
 data_repo=missing_month(data_copy)
-# print_data(data_repo)
+import pandas as  pd
+combined_df = pd.DataFrame(data_repo, columns=['Date', 'Repo Rate'])
 
-
-
+# Save the DataFrame to an Excel file
+combined_df.to_excel('Repo_Rate.xlsx', index=False)
 
 
 ## scrapping of inflation data yoy.
@@ -181,8 +182,3 @@ cci_df = pd.DataFrame({'Date': date_range, 'CCI': cci_data})
 
 # gdp data mmanipulation
 
-import pandas as pd
-import numpy as np
-gdp_data=pd.read_excel("C:\\Users\\91978\\Desktop\\inflation_prediction_project\\excel_files\\gdp_changeqtr.xlsx")
-
-gdp_data.head()
